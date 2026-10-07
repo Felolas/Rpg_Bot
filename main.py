@@ -24,6 +24,7 @@ if not ACTIVE_KEY:
     raise RuntimeError("Не найден ни один API ключ Gemini.")
 
 ai_client = genai.Client(api_key=ACTIVE_KEY
+gemini_clients = [ai_client]
 
 MODEL_NAME = os.getenv("GEMINI_MODEL", "gemini-3.6-flash")
 BOT_USERNAME = ""
@@ -39,7 +40,6 @@ SYSTEM_PROMPT = """
 """
 
 bot = telebot.TeleBot(TELEGRAM_TOKEN, threaded=False)
-gemini_clients = [genai.Client(api_key=key) for key in GEMINI_API_KEYS]
 user_sessions: dict[int, "GameSession"] = {}
 pending_questions: dict[int, dict[str, Any]] = {}
 active_rolls: dict[int, "RollState"] = {}
