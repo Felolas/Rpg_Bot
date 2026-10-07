@@ -428,4 +428,27 @@ def main() -> None:
 
 
 if __name__ == "__main__":
+    # Запускаємо фейковий веб-сервер для безкоштовного тарифу Render
+    from http.server import HTTPServer, BaseHTTPRequestHandler
+    import threading
+
+    class SimpleHandler(BaseHTTPRequestHandler):
+        def do_GET(self):
+            self.send_response(200)
+            self.end_headers()
+            self.wfile.write(b"Bot is alive!")
+
+        def log_message(self, format, *args):
+            return  # вимикаємо зайві логи сервера
+
+    def run_web_server():
+        port = int(os.environ.get("PORT", 10000))
+        server = HTTPServer(('0.0.0.0', port), SimpleHandler)
+        server.serve_forever()
+
+    # Запускаємо сервер в окремому потоці
+    threading.Thread(target=run_web_server, daemon=True).start()
+    
+    # Запускаємо нашого бота
     main()
+    
