@@ -16,16 +16,16 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(mess
 logger = logging.getLogger("telegram-rpg-bot")
 
 TELEGRAM_TOKEN = os.environ["TELEGRAM_TOKEN"]
-GEMINI_API_KEYS = [
-    key
-    for key in (
-        os.environ.get("GEMINI_API_KEY"),
-        os.environ.get("GEMINI_API_KEY_2"),
-    )
-    if key
-]
-if not GEMINI_API_KEYS:
-    raise RuntimeError("Не найден ни один ключ Gemini в Secrets.")
+KEY_1 = os.environ.get("GEMINI_API_KEY")
+KEY_2 = os.environ.get("GEMINI_API_KEY_2")
+ACTIVE_KEY = KEY_1 if KEY_1 else KEY_2
+
+if not ACTIVE_KEY:
+    raise RuntimeError("Не найден ни один API ключ Gemini.")
+
+ai_client = genai.Client(api_key=ACTIVE_KEY)
+gemini_clients = [ai_client]
+
 MODEL_NAME = os.getenv("GEMINI_MODEL", "gemini-3.6-flash")
 BOT_USERNAME = ""
 
