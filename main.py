@@ -23,7 +23,7 @@ ACTIVE_KEY = KEY_1 if KEY_1 else KEY_2
 if not ACTIVE_KEY:
     raise RuntimeError("Не найден ни один API ключ Gemini.")
 
-ai_client = genai.Client(api_key=ACTIVE_KEY
+ai_client = genai.Client(api_key=ACTIVE_KEY)
 gemini_clients = [ai_client]
 
 MODEL_NAME = os.getenv("GEMINI_MODEL", "gemini-3.6-flash")
