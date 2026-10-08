@@ -18,13 +18,16 @@ logger = logging.getLogger("telegram-rpg-bot")
 TELEGRAM_TOKEN = os.environ["TELEGRAM_TOKEN"]
 KEY_1 = os.environ.get("GEMINI_API_KEY")
 KEY_2 = os.environ.get("GEMINI_API_KEY_2")
-ACTIVE_KEY = KEY_1 if KEY_1 else KEY_2
 
-if not ACTIVE_KEY:
+if not KEY_1 and not KEY_2:
     raise RuntimeError("Не найден ни один API ключ Gemini.")
 
-ai_client = genai.Client(api_key=ACTIVE_KEY)
-gemini_clients = [ai_client]
+# Створюємо список клієнтів (якщо ключ є — створюємо для нього клієнт)
+gemini_clients = []
+if KEY_1:
+    gemini_clients.append(genai.Client(api_key=KEY_1))
+if KEY_2:
+    gemini_clients.append(genai.Client(api_key=KEY_2))
 
 MODEL_NAME = os.getenv("GEMINI_MODEL", "gemini-3.6-flash")
 BOT_USERNAME = ""
